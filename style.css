@@ -130,6 +130,24 @@ input:focus::-webkit-input-placeholder {
     color: #f00; /*修改webkit中focus状态下input的planceholder样式*/
 }
 
+@font-face {
+    font-family: 'iconfont';
+    src: url('./static/iconfont.eot');
+    src: url('./static/iconfont.eot?#iefix') format('embedded-opentype'),
+    url('./static/iconfont.woff2') format('woff2'),
+    url('./static/iconfont.woff') format('woff'),
+    url('./static/iconfont.ttf') format('truetype'),
+    url('./static/iconfont.svg#iconfont') format('svg');
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 .navbar, .header {
     display: -webkit-flex; /*webkit*/
     display: flex;
@@ -245,67 +263,195 @@ li.gaoji {
     opacity: 1;
 }
 
-.alertBox {
-    display: none;
+.alertHeader {
+    padding: 30px 20px 20px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.alertContent {
+    padding: 0px 20px 30px;
+    font-size: 13px;
+    color: #7f7f7f;
+    line-height: 20px;
+}
+
+.layout-root {
     position: fixed;
-    width: 100%;
     height: 100%;
+    width: 100%;
+    z-index: -1;
     top: 0;
     left: 0;
-    overflow: hidden;
-    z-index: 99;
 }
 
-.alertBox .bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: block;
-    height: 100%;
-    opacity: 0.5;
-    background: #000;
-    z-index: -1
+.none {
+    display: none;
 }
 
-.alertBox .alert {
-    box-sizing: border-box;
-    padding: 30px 20px;
+#close {
     position: absolute;
-    top: 50%;
+    top: 110%;
     left: 50%;
-    display: block;
-    border-radius: 3px;
-    height: 300px;
-    width: 70%;
-    -webkit-transform: translate3d(-50%, -50%, 0);
-    transform: translate3d(-50%, -50%, 0);
-    background-color: #fff;
-}
-
-.alertBox .alert a {
-    position: absolute;
-    left: 50%;
-    top: 108%;
-    -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
     color: white;
 }
 
-@font-face {
-    font-family: 'iconfont';
-    src: url('./static/iconfont.eot');
-    src: url('./static/iconfont.eot?#iefix') format('embedded-opentype'),
-    url('./static/iconfont.woff2') format('woff2'),
-    url('./static/iconfont.woff') format('woff'),
-    url('./static/iconfont.ttf') format('truetype'),
-    url('./static/iconfont.svg#iconfont') format('svg');
+.dialog-face {
+    opacity: 0.5;
+    z-index: -1;
+    position: fixed;
+    background: #000;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    -webkit-animation-duration: 500ms;
+    animation-duration: 500ms;
 }
 
-.iconfont {
-    font-family: "iconfont" !important;
-    font-size: 16px;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+.dialog-face.slipBottom[opacity="0"] {
+    display: none;
+}
+
+.dialog-face.slipUp {
+    opacity: 0.7;
+    -webkit-animation-name: dialogFaceSlipToUp;
+    animation-name: dialogFaceSlipToUp;
+}
+
+.dialog-face.slipBottom {
+    opacity: 0;
+    visibility: hidden;
+    -webkit-animation-name: dialogFaceSlipToBottom;
+    animation-name: dialogFaceSlipToBottom;
+}
+
+.dialog-root {
+    position: fixed;
+    z-index: 2000;
+    left: 65%;
+    width: 100%;
+    -webkit-animation-duration: 500ms;
+    animation-duration: 500ms;
+    -webkit-perspective: 1300px;
+    perspective: 1300px;
+}
+
+.dialog-root.slipUp {
+    top: 50%;
+    opacity: 1;
+    -webkit-animation-name: dialogSlipToUp;
+    animation-name: dialogSlipToUp;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.dialog-root.slipBottom {
+    top: 100%;
+    opacity: 0.3;
+    -webkit-animation-duration: 500ms;
+    animation-duration: 500ms;
+    -webkit-animation-name: dialogSlipToBottom;
+    animation-name: dialogSlipToBottom;
+    -webkit-transform: translate(-50%, 0);
+    transform: translate(-50%, 0);
+}
+
+.dialog-wrapper {
+    background: white;
+    width: 70%;
+    height: 300px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-animation-duration: 500ms;
+    animation-duration: 500ms;
+    -webkit-transform-origin: 50% 100%;
+    transform-origin: 50% 100%;
+}
+
+.dialog-wrapper.slipUp {
+    -webkit-transform: rotateX(0deg);
+    transform: rotateX(0deg);
+    -webkit-animation-name: contentSlipToUp;
+    animation-name: contentSlipToUp;
+}
+
+.dialog-wrapper.slipBottom {
+    -webkit-transform: rotateX(90deg);
+    transform: rotateX(90deg);
+    -webkit-animation-name: contentSlipToBottom;
+    animation-name: contentSlipToBottom;
+}
+
+@keyframes dialogFaceSlipToUp {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes dialogFaceSlipToBottom {
+    0% {
+        opacity: 0.7;
+        visibility: visible;
+    }
+    100% {
+        visibility: hidden;
+        opacity: 0;
+    }
+}
+
+@keyframes dialogSlipToUp {
+    0% {
+        top: 100%;
+        opacity: 0.3;
+    }
+    100% {
+        top: 50%;
+        opacity: 1;
+    }
+}
+
+@keyframes dialogSlipToBottom {
+    0% {
+        top: 50%;
+        opacity: 1;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+    100% {
+        top: 100%;
+        opacity: 0.3;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes contentSlipToUp {
+    0% {
+        -webkit-transform: rotateX(90deg);
+        transform: rotateX(90deg);
+    }
+    100% {
+        -webkit-transform: rotateX(0deg);
+        transform: rotateX(0deg);
+    }
+}
+
+@keyframes contentSlipToBottom {
+    0% {
+        -webkit-transform: rotateX(0deg);
+        transform: rotateX(0deg);
+    }
+    60% {
+        -webkit-transform: rotateX(60deg);
+        transform: rotateX(60deg);
+    }
+    100% {
+        -webkit-transform: rotateX(90deg);
+        transform: rotateX(90deg);
+    }
 }
